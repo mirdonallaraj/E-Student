@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Grades - Class Management</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="/assets/img/mylogo.jpg" rel="icon">
+    <link href="/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link th:href="@{/assets/css/style.css}" rel="stylesheet">
+
+</head>
+<body>
+<div th:replace="~{teacher/teacher-navbar}"></div>
+<div th:replace="~{teacher/teacher-sidebar}"></div>
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1>Manage Grades</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/teacher/dashboard}">Home</a></li>
+                <li class="breadcrumb-item active">Grades</li>
+            </ol>
+        </nav>
+    </div>
+    <section class="section">
+        <div class="container mt-3">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Student Name</th>
+                    <th scope="col">Grade</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="student : ${students}">
+                    <td th:text="${student.name}">Student Name</td>
+                    <td th:text="${student.grade}" class="grade">Grade</td>
+                    <td>
+                        <button class="btn btn-primary edit-button" data-bs-toggle="modal" data-bs-target="#editModal" th:data-student-id="${student.id}" th:data-student-name="${student.name}" th:data-student-grade="${student.grade}">Edit</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<!-- Edit Grade Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Edit Grade</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editGradeForm">
+                    <input type="hidden" id="studentId">
+                    <div class="mb-3">
+                        <label for="studentName" class="form-label">Student Name</label>
+                        <input type="text" class="form-control" id="studentName" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="studentGrade" class="form-label">Grade</label>
+                        <input type="text" class="form-control" id="studentGrade">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<footer id="footer" class="footer">
+    <div class="copyright">
+        &copy; Copyright <strong><span>Mirdon Allaraj</span></strong>. All Rights Reserved
+    </div>
+</footer>
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+<!-- Vendor JS Files -->
+<script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+<script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
+<script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
+<script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
+<script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+<script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
+<script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
+
+<!-- Template Main JS File -->
+<script th:src="@{/assets/js/main.js}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var editButtons = document.querySelectorAll('.edit-button');
+        var editModal = new bootstrap.Modal(document.getElementById('editModal'));
+        var studentIdInput = document.getElementById('studentId');
+        var studentNameInput = document.getElementById('studentName');
+        var studentGradeInput = document.getElementById('studentGrade');
+
+        editButtons.forEach(function(button) {
+            button.addEventListener('click', function() {
+                var studentId = button.getAttribute('data-student-id');
+                var studentName = button.getAttribute('data-student-name');
+                var studentGrade = button.getAttribute('data-student-grade');
+
+                studentIdInput.value = studentId;
+                studentNameInput.value = studentName;
+                studentGradeInput.value = studentGrade;
+            });
+        });
+
+        var editGradeForm = document.getElementById('editGradeForm');
+        editGradeForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            var studentId = studentIdInput.value;
+            var studentGrade = studentGradeInput.value;
+            // Update the grade in the table (this is just a demo, actual saving would involve a backend call)
+            var row = document.querySelector('tr [data-student-id="' + studentId + '"]').closest('tr');
+            row.querySelector('.grade').textContent = studentGrade;
+            editModal.hide();
+        });
+    });
+</script>
+
+</body>
+</html>

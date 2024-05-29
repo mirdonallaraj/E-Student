@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Dashboard - FEUT</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- full Calendar -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.5/main.min.css" rel="stylesheet">
+
+  <!-- Favicons -->
+  <link href="/assets/img/mylogo.jpg" rel="icon">
+  <link href="/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link th:href="@{/assets/css/style.css}" rel="stylesheet">
+
+
+  <!-- =======================================================
+  * Template Name: NiceAdmin
+  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+  * Updated: Apr 7 2024 with Bootstrap v5.3.3
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+
+  <style>
+    #calendar .math-class { background-color: #f0f0f0; }
+    #calendar .history-class { background-color: #f1c40f; }
+    #calendar .physics-class { background-color: #599fef; }
+  </style>
+
+</head>
+
+<body>
+
+<div th:replace="~{student/student-navbar}"></div>
+<div th:replace="~{student/student-sidebar}"></div>
+
+<main id="main" class="main">
+
+  <div class="pagetitle">
+    <h1>Dashboard</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a th:href="@{/student/dashboard}">Home</a></li>
+        <li class="breadcrumb-item active">Dashboard</li>
+      </ol>
+    </nav>
+  </div><!-- End Page Title -->
+
+  <section class="section dashboard">
+    <div class="row">
+      <div class="col-12">
+        <div class="row">
+          <!-- Courses today starts here -->
+          <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card">
+              <div class="card-header">
+                Your Courses Today
+              </div>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item" th:each="course : ${todayCourses}">
+                  <span th:text="${course.name}">Course Name</span> -
+                  <span th:text="${course.time}">Course Time</span>
+                </li>
+              </ul>
+            </div>
+          </div><!-- Courses today ends here -->
+
+          <!-- Recent grades starts here -->
+          <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card">
+              <div class="card-header">
+                Recent Grades
+              </div>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">Math: 92%</li>
+                <li class="list-group-item">History: 88%</li>
+                <li class="list-group-item">Physics: 95%</li>
+              </ul>
+            </div>
+          </div><!-- recent grades ends here -->
+
+          <!-- announcements here -->
+          <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card">
+              <div class="card-header">
+                Announcements
+              </div>
+              <div class="card-body">
+                <p>Registration for next semester starts next week.</p>
+                <p>Guest lecture on "The Future of Technology" this Friday.</p>
+              </div>
+            </div>
+          </div><!-- announcements ends here -->
+
+          <!-- To do Lists starts here -->
+          <div class="col-lg-12 mb-4">
+            <div class="card">
+              <div class="card-header">
+                To-Do List
+              </div>
+              <ul class="list-group list-group-flush" id="todoList">
+                <li class="list-group-item">
+                  Read Chapter 5 <button class="btn btn-sm btn-danger float-end">Remove</button>
+                </li>
+                <!-- Additional tasks will be added here -->
+              </ul>
+              <div class="card-body">
+                <input type="text" class="form-control" placeholder="Add new task" id="newTask">
+                <button class="btn btn-primary mt-2" onclick="addTask()">Add Task</button>
+              </div>
+            </div>
+          </div>
+
+          <script>
+            function addTask() {
+              var taskInput = document.getElementById('newTask');
+              var newTask = taskInput.value;
+              if (newTask) {
+                var listItem = document.createElement('li');
+                listItem.className = 'list-group-item';
+                listItem.innerHTML = newTask + ' <button class="btn btn-sm btn-danger float-end">Remove</button>';
+                document.getElementById('todoList').appendChild(listItem);
+                taskInput.value = ''; // Clear input after adding
+              }
+            }
+          </script><!-- End To do Lists  -->
+
+<!--          &lt;!&ndash; Calendar starts here &ndash;&gt;-->
+<!--          <div class="col-lg-12 mb-4">-->
+<!--            <div class="card">-->
+<!--              <div class="card-header">-->
+<!--                Academic Calendar-->
+<!--              </div>-->
+<!--              <div class="card-body">-->
+<!--                <div id="calendar"></div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+
+<!--          <script th:src="@{/assets/vendor/fullcalendar/main.js}"></script>-->
+<!--          <link th:href="@{/assets/vendor/fullcalendar/main.css}" rel="stylesheet"/>-->
+<!--          <script>-->
+<!--            document.addEventListener('DOMContentLoaded', function() {-->
+<!--              var calendarEl = document.getElementById('calendar');-->
+<!--              var calendar = new FullCalendar.Calendar(calendarEl, {-->
+<!--                initialView: 'dayGridMonth'-->
+<!--              });-->
+<!--              calendar.render();-->
+<!--            });-->
+<!--          </script>&lt;!&ndash; Calendar ends here &ndash;&gt;-->
+
+          <!-- Calendar starts here -->
+          <div class="col-lg-12 mb-4">
+            <div class="card">
+              <div class="card-header">
+                Classroom Schedule
+              </div>
+              <div class="card-body">
+                <div id="calendar"></div>
+              </div>
+            </div>
+          </div>
+
+          <script>
+            // document.addEventListener('DOMContentLoaded', function() {
+            //   var calendarEl = document.getElementById('calendar');
+            //   var calendar = new FullCalendar.Calendar(calendarEl, {
+            //     initialView: 'timeGridWeek',  // This view displays the week view with time slots
+            //     firstDay: 1,                 // Week starts from Monday
+            //     headerToolbar: {
+            //       left: 'prev,next today',
+            //       center: 'title',
+            //       right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            //     },
+            //     slotMinTime: '08:00:00',     // Calendar starts at 08:00 AM
+            //     slotMaxTime: '20:00:00',     // Calendar ends at 08:00 PM
+            //     expandRows: true,            // Expand row heights dynamically
+            //     locale: 'en',                // Locale of the calendar
+            //     events: [
+            //       {
+            //         title: 'Math - Room B302',
+            //         start: '2024-09-01T12:00:00',
+            //         end: '2024-09-01T13:30:00',
+            //         daysOfWeek: [1, 3],  // Monday and Wednesday
+            //         allDay: false,       // Explicitly tell FullCalendar these are not all-day events
+            //         classNames: ['math-class']
+            //       },
+            //       {
+            //         title: 'History - Room A101',
+            //         start: '2024-09-01T12:00:00',
+            //         end: '2024-09-01T13:30:00',
+            //         daysOfWeek: [2, 4],  // Tuesday and Thursday
+            //         allDay: false,
+            //         classNames: ['history-class']
+            //       },
+            //       {
+            //         title: 'Physics - Room C204',
+            //         start:'2018-09-25T08:30:00', // 25th September 2018, 8:30 AM
+            //         end: '2018-10-05T17:00:00',
+            //         daysOfWeek: [1, 3, 5],  // Monday, Wednesday, and Friday
+            //         allDay: false,
+            //         classNames: ['physics-class']
+            //       }
+            //     ],
+            //     eventColor: '#378006'  // Default event color
+            //   });
+            //   calendar.render();
+            // });
+            document.addEventListener('DOMContentLoaded', function() {
+              var calendarEl = document.getElementById('calendar');
+              var calendar = new FullCalendar.Calendar(calendarEl, {
+                // plugins: ['timeGrid', 'interaction'],
+                initialView: 'dayGridMonth',
+                firstDay: 1,
+                headerToolbar: {
+                  left: 'prev,next today',
+                  center: 'title',
+                  right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                slotLabelFormat: {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  hour12: false
+                },
+                slotMinTime: '08:00:00',
+                slotMaxTime: '20:00:00',
+                height: 'auto',
+                events: [
+                  {
+                    title: 'Math - Room B302',
+                    start: '2024-09-01T10:00:00',
+                    end: '2024-09-01T11:30:00',
+                    daysOfWeek: [1, 3],
+                    allDay: false,
+                    classNames: ['math-class']
+                  },
+                  {
+                    title: 'History - Room A101',
+                    start: '2024-09-02T12:00:00',
+                    end: '2024-09-02T13:30:00',
+                    daysOfWeek: [2, 4],
+                    allDay: false,
+                    classNames: ['history-class']
+                  },
+                  {
+                    title: 'Physics - Room C204',
+                    start: '2024-09-03T14:00:00',
+                    end: '2024-09-03T15:30:00',
+                    daysOfWeek: [1, 3, 5],
+                    allDay: false,
+                    classNames: ['physics-class']
+                  }
+                ]
+              });
+              calendar.render();
+            });
+          </script>
+
+          <!-- Calendar ends here -->
+
+          <!-- Chat campus starts here -->
+          <div class="col-lg-12 mb-4">
+            <div class="card">
+              <div class="card-header">
+                Campus Chat
+              </div>
+              <div class="card-body">
+                <div class="chat-box">
+                  <!-- Chat messages will be dynamically added here -->
+                </div>
+                <input type="text" class="form-control" placeholder="Type a message..." id="chatMessage">
+                <button class="btn btn-primary mt-2">Send</button>
+              </div>
+            </div>
+          </div><!-- Chat campus ends here -->
+
+          <!-- Links start here -->
+          <div class="col-lg-12 mb-4">
+            <div class="card">
+              <div class="card-header">
+                Quick Links
+              </div>
+              <div class="card-body">
+                <a href="#" class="card-link">Academic Handbook</a>
+                <a href="#" class="card-link">Financial Aid Information</a>
+                <a href="#" class="card-link">Counseling Services</a>
+                <a href="#" class="card-link">Internship Opportunities</a>
+              </div>
+            </div>
+          </div><!-- Links ends here -->
+
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main><!-- End #main -->
+
+<!-- ======= Footer ======= -->
+<footer id="footer" class="footer">
+  <div class="copyright">
+    &copy; Copyright <strong><span>Mirdon Allaraj</span></strong>. All Rights Reserved
+  </div>
+
+</footer><!-- End Footer -->
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+<!-- Vendor JS Files -->
+<script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+<script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
+<script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
+<script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
+<script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+<script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
+<script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
+
+<!-- Template Main JS File -->
+<script th:src="@{/assets/js/main.js}"></script>
+
+<!-- full Calendar -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.5/main.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.5/locales-all.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@5.11.5/main.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@5.11.5/main.min.js"></script>
+
+
+
+</body>
+
+
+</html>

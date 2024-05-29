@@ -1,0 +1,41 @@
+body {
+    background-color: #f8f9fa; /* Light gray background similar to the screenshot */
+}
+
+.container {
+    max-width: 800px; /* Adjust based on preference */
+}
+
+.list-group-item {
+    background-color: #ffffff; /* White background for items */
+    border-left: 5px solid #007bff; /* Blue border on the left for highlighting */
+    border-radius: 0; /* Remove default border radius */
+    margin-bottom: 8px; /* Space between items */
+}
+
+.list-group-item h5 {
+    font-size: 16px; /* Title font size */
+    color: #333; /* Dark grey color for text */
+}
+
+.list-group-item small {
+    color: #666; /* Light grey color for smaller text */
+}
+
+.list-group-item p {
+    color: #555; /* Slightly darker grey for paragraph text */
+}
+
+.shift-left-slightly {
+    margin-left: -300px; /* Adjust this value based on how much you want to shift */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px; /* More padding on smaller screens */
+    }
+    .list-group-item h5 {
+        font-size: 14px; /* Smaller font size on mobile */
+    }
+}
